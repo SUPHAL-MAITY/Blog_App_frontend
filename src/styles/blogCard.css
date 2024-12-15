@@ -1,0 +1,99 @@
+@import url('https://fonts.googleapis.com/css2?family=Bitter:ital,wght@0,100..900;1,100..900&family=Caveat:wght@400..700&family=Faculty+Glyphic&family=Funnel+Display:wght@300..800&family=Geist+Mono:wght@100..900&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Satisfy&display=swap');
+
+.blog_app{
+    font-family: Arial, sans-serif;
+    text-align: center;
+    padding: 20px;
+  }
+  
+ 
+  .blog-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    max-width: 1000px;
+    margin: 20px auto;
+  }
+  
+  .blog-card-all {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease;
+  }
+  
+  .blog-card:hover {
+    transform: scale(1.02);
+  }
+  
+  .blog-card-image img {
+    width: 200px;
+    height: 160px;
+    object-fit: cover;
+    border-radius: 8px;
+  }
+  
+  .blog-card-content {
+    margin-left: 20px;
+    flex-grow: 1;
+    text-align: left;
+  }
+  
+  .blog-card-content h2 {
+    margin-top: 10px;
+    font-size: 26px;
+    font-family: "Funnel Display", serif;
+    font-optical-sizing: auto;
+    font-style: normal;
+    text-decoration: none;
+    
+  }
+
+    .no-underline{
+      text-decoration: none;
+    }
+
+  
+ .blog-author {
+    font-style: italic;
+    color: #1a0b0b;
+    margin-bottom: 10px;
+    font-size: 18px;
+    font-family: "Funnel Display", serif;
+    font-optical-sizing: auto;
+    font-style: normal;
+  }
+  
+  .blog-card p {
+    font-size: 1.1em;
+    color: #333;
+  }
+  
+  .blog-card small {
+    display: block;
+    margin-top: 10px;
+    color: #777;
+  }
+  
+  /* Responsive styles */
+  @media (max-width: 768px) {
+    .blog-card-all{
+      flex-direction: column;
+      text-align: center;
+    }
+  
+    .blog-card-image img {
+      width: 100%;
+      height: auto;
+    }
+  
+    .blog-card-content {
+      margin-left: 0;
+    }
+  }
