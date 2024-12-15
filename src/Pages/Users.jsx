@@ -181,6 +181,8 @@ const handleSortByStatusUp=()=>{
   setSortByStatus(prev=>!prev)
 }
 
+
+
 const handleSortByStatusDown=()=>{
   let sortedUsers=[...users].sort((a,b)=>b.status.localeCompare(a.status))
   setUsers(sortedUsers)
@@ -223,9 +225,7 @@ const handleSortByStatusDown=()=>{
   }
   try {
     const { data } = await api.get(`/admin/user-search?q=${searchItem}`);
-    // setUsers(data?.data?.users);
-    // setTotalPages(data?.data?.totalPages)
-    // setCurrentPage(data?.data?.recentPage)
+    
     console.log(data?.data);
     if(data?.data?.length>0){
       setUsers(data?.data?.users)
@@ -363,18 +363,7 @@ const handleSortByStatusDown=()=>{
         </table>
       </div>
     </div>
-    {/* <div className="users_card_footer">
-      <div className="pagination">
-        <span>&laquo;</span>
-        <span>1</span>
-        <span className="active">2</span>
-        <span>3</span>
-        <span>4</span>
-        <span>5</span>
-        <span>6</span>
-        <span>&raquo;</span>
-      </div>
-    </div> */}
+
 
 
 

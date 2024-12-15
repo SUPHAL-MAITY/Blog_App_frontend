@@ -16,16 +16,30 @@ const UserDashboard = () => {
 
 
     const [blogs, setBlogs] = useState([]);
-    const[length,setLength]=useState(0)
+    const [length,setLength]=useState(0)
+
+
+    
+    const [searchItem,setSearchItem]=useState("")
+    const [loading,setLoading]=useState(false)
+  
+    ///for pagination
+    const [currentPage,setCurrentPage]=useState(1)
+    const [totalPages,setTotalPages]=useState(0)
+
+
+
     const navigate=useNavigate()
     const  api=createApiInstance(navigate);
   
   
     const fetchData = async () => {
       try {
-        const { data } = await api.get(`/user/get-own-blogs`);
+        const { data } = await api.get(`/user/get-own-blogs?page=${currentPage}`);
         setLength(data?.data?.length)
-        setBlogs(data?.data.ownBlogs);
+        setBlogs(data?.data.blogs);
+        setTotalPages(data?.data?.totalPages)
+        setCurrentPage(data?.data?.recentPage)
         console.log(data?.data);
       } catch (error) {
         console.error(error)
@@ -47,9 +61,13 @@ const UserDashboard = () => {
   
     useEffect(() => {
       fetchData();
-    }, []);
+      
+    }, [currentPage]);
 
-  
+    
+
+
+
   const handleBlogEdit=(id)=>{
     console.log("edit clicked",id)
     navigate(`/blog-edit/${id}`)
@@ -71,6 +89,72 @@ const UserDashboard = () => {
 
   }
 
+///pagination 
+const handlePreviousPage=()=>{
+  if(currentPage>1){
+    setCurrentPage(currentPage-1)
+  }
+  return;
+ }
+
+ const handleNextPage=()=>{
+  if(currentPage<totalPages){
+    setCurrentPage(currentPage+1)
+  }
+  return;
+ }
+
+  ////search function
+  
+   const handleSearch=async()=>{
+    console.log("search clicked")
+    console.log(searchItem)
+    if(searchItem.trim()===""){
+      toast.warn('🦄  please  write something!', {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark"
+        
+        });
+      return;
+    }
+    try {
+      const { data } = await api.get(`/user/get-own-search-blogs?q=${searchItem}`);
+      console.log(data?.data);
+      if(data?.data?.length>0){
+        setBlogs(data?.data?.blogs)
+        setTotalPages(1)
+        setCurrentPage(1)
+        setSearchItem("")
+      }else{
+        fetchData();
+        toast.warn('🦄 No data found!', {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark"
+          
+          });
+        console.log("no data found")
+         setSearchItem("")
+      }
+    } catch (error) {
+      console.error(error)
+  
+    }
+  
+   }
+  
+
 
 
   return (
@@ -79,17 +163,44 @@ const UserDashboard = () => {
 
 
     <div className="users_card">
+
+
+       <ToastContainer
+                  position="top-center"
+                  autoClose={5000}
+                  hideProgressBar={false}
+                  newestOnTop={false}
+                  closeOnClick
+                  rtl={false}
+                  pauseOnFocusLoss
+                  draggable
+                  pauseOnHover
+                  theme="dark"
+      
+             />
+
+
+
+
     <div className="users_card_heading">
       <h3>My Blogs</h3>
     </div>
-    {/* <div className="users_search_container">
+
+
+    {/* search input ...... */}
+    <div className="users_search_container">
       <input
         type="text"
         className="users_search"
+        value={searchItem}
+        onChange={(e)=>setSearchItem(e.target.value)}
         placeholder="Search users by name.."
       />
-      <button className="serach_btn">Search</button>
-    </div> */}
+      <button className="serach_btn"  onClick={handleSearch}>Search</button>
+    </div>
+
+
+
     <div className="users_table_container">
       <div style={{ overflow: "auto" }}>
         <table>
@@ -118,13 +229,15 @@ const UserDashboard = () => {
               <tr  key={i}>
                 <td>{i+1}</td>
                 
-              <Link
-              to={`/single-blogs/${c._id}`}
-              className="user-blog-title-link"
-               >
-                 <td>{c.title.length>40 ?c.title.slice(0,40)+"..." :c.title}</td>
+             
+                 <td> <Link
+                    to={`/single-blogs/${c._id}`}
+                    className="user-blog-title-link"
+                    >{c.title.length>40 ?c.title.slice(0,40)+"..." :c.title}
+                      </Link>
+               </td>
 
-               </Link>
+              
                
                 <td>{c.category}</td>
                 <td><img src={c.imageUrl}  className="users_post_img" alt="" />
@@ -153,6 +266,19 @@ const UserDashboard = () => {
          <div className="no-data-found"><h1>No Data Found</h1></div>}
       </div>
     </div>
+
+    <div id="pagination-footer">
+
+<button id="prev-page" className="pagination-button" disabled={currentPage==1} onClick={handlePreviousPage} >
+    <i className="fa-solid fa-angle-left"></i>
+</button>
+
+
+<button id="next-page" className="pagination-button"  disabled={currentPage==totalPages} onClick={handleNextPage}>
+<i className="fa-solid fa-angle-right"></i>
+</button>
+</div>
+    
     
   </div>
     
