@@ -29,6 +29,7 @@ const BlogPost = () => {
     try {
 
           ///validation
+          
           if([title,category,content,imageUrl].some((value)=>String(value).trim()==="")){
             toast.error("Please fill all the fields", {
               position: "top-center",
