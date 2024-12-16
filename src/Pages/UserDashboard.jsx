@@ -80,9 +80,22 @@ const UserDashboard = () => {
     try {
       const { data } = await api.delete(`/user/delete-blog/${id}`);
       console.log(data)
-      window.location.reload()
+      toast.success('Blog deleted successfully', {
+             position: "top-center",
+             autoClose: 5000,
+             hideProgressBar: false,
+             closeOnClick: true,
+             pauseOnHover: true,
+             draggable: true,
+             progress: undefined,
+             theme: "light",
+             
+             });
+          
+             fetchData();
       
     } catch (error) {
+      console.error(error)
       navigate("/user-dashboard")
       
     }
